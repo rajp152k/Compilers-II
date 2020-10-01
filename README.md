@@ -5,5 +5,5 @@
 Compilers II - group project
 ---
 
-Check Wiki for conceptualization and resources.
-<https://github.com/rajp152k/Compilers-II/wiki>
+Check [Wiki](https://github.com/rajp152k/Compilers-II/wiki) for conceptualization and resources.
+
