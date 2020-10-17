@@ -34,6 +34,7 @@ fig figure {
     m <- (-inf) to (-1.5)
     l <- func m {alpha: 0.8}
 
+
     // this subplot will occupy the first unoccupied position in the figure 
     // which is [1, 1]
 }
