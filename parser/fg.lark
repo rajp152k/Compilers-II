@@ -17,9 +17,8 @@ stmt_list :
 size_stmt : "size <-" _INT _INT 
 
 range_stmt : _IDNAME "<-" points | range
-
-range : _NUMBER "to" _NUMBER range_attr
-
+range : [range_descriptor] _NUMBER "to" _NUMBER
+range_descriptor : _INT "in" | "continuous" 
 points : "[" _NUMBER ("," _NUMBER)* "]"
 
 subplot_stmt : "subplot" _INT ("," _INT)? "{" stmt_list "}"
