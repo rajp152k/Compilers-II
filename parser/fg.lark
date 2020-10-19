@@ -3,6 +3,13 @@ figure : "fig" fig_name "{" stmt_list "}"
 
 fig_name : ID
 
+attr_list : "{" attr ("," attr)* "}"
+attr : key ":" value
+
+key : ID
+value : ATTR_VALUE
+ATTR_VALUE : ESCAPED_STRING|REAL
+
 stmt_list : (stmt)+
 
 stmt :  size_stmt
@@ -11,7 +18,7 @@ stmt :  size_stmt
        | range_stmt
        | function_stmt
 
-size_stmt : "size <-" nrows ["," ncols]
+size_stmt : "size <-" nrows ["," ncols] [attr_list]
 
 nrows : INT
 ncols : INT 
@@ -30,7 +37,10 @@ points : "[" point ("," point)* "]"
 
 point : REAL
 
-subplot_stmt : "subplot" xindex ["," yindex] "{" subplot_stmt_list "}"
+subplot_stmt : "subplot" [xindex ["," yindex]] "{" subplot_stmt_list "}"
+
+xindex : INT
+yindex : INT
 
 subplot_stmt_list : (subplot_single_stmt)+
 
@@ -38,10 +48,8 @@ subplot_single_stmt : plotting_stmt
 			    | range_stmt
 			    | function_stmt
 
-xindex : INT
-yindex : INT
 
-plotting_stmt : dependent_variable "<-" "func" indendent_variable
+plotting_stmt : dependent_variable "<-" "func" indendent_variable [attr_list]
 
 dependent_variable : ID
 indendent_variable : ID
@@ -60,6 +68,13 @@ PAREN : "(" | ")"
 OPERATOR : "+" | "-" | "*" | "/" 
 
 ID : (LCASE_LETTER)+
+
+_STRING_INNER: /.*?/
+_STRING_ESC_INNER: _STRING_INNER /(?<!\\)(\\\\)*?/ 
+
+ESCAPED_STRING : ("\"" _STRING_ESC_INNER "\"") 
+				|("'" _STRING_ESC_INNER "'")
+				|("(" _STRING_ESC_INNER ")")
 
 %import common.LCASE_LETTER
 %import common.SIGNED_NUMBER -> REAL

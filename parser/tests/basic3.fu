@@ -1,0 +1,33 @@
+fig figure {
+    size <- 3, 2
+    
+    y <- [x**2, sin(x), e**x]
+    x <- -10 to 10 
+    y <- func x {color: 'r', linewidth: 2}
+
+    subplot 2, 0 {
+        y <- [6, 8, 10, 5, 4]
+        x <- [1,2,3,4,5]
+        y <- func x {
+                style: 'bar', 
+                color: 'b', 
+                xlabel: 'roman', 
+                ylabel: 'number', 
+                title: 'bar graph'
+            }
+    }
+    
+    subplot 2, 1 {
+        w <- [k**10, sec(k)**2]
+        fnc <- [k**10.1, tan(k)**2]
+        k <- -1 to 1 
+        w <- func k {color: 'g', linestyle: 'o-'}
+        fnc <- func k {color: 'r', linestyle: '-*'}
+    }
+    
+    l <- 10*m+15
+    m <- 1.5 to 3
+    l <- func m {alpha: 0.8}
+
+}
+
