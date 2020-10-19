@@ -5,26 +5,47 @@
 %import common.CNAME -> _IDNAME
 %import common.NUMBER -> _NUMBER
 %import common.INT -> _INT
+%import common.WS -> _WS
+%ignore _WS
 
 // 
 // GRAMMAR 
 // 
 
-figure : "fig" _IDNAME "{" stmt_list "}"
+start:			figure+
 
-stmt_list : 
+figure : 		"fig" _IDNAME "{" stmt_list "}"
 
-size_stmt : "size <-" _INT _INT 
+////makeshift : for testing purposes : not final
+stmt_list :	  	stmt ("," stmt)*
+stmt:			size_stmt
+			|range_stmt
+			|subplot_stmt
+			|plotting_stmt
+			|function_stmt
+//// 
 
-range_stmt : _IDNAME "<-" points | range
-range : [range_descriptor] _NUMBER "to" _NUMBER
-range_descriptor : _INT "in" | "continuous" 
-points : "[" _NUMBER ("," _NUMBER)* "]"
 
-subplot_stmt : "subplot" _INT ("," _INT)? "{" stmt_list "}"
 
-plotting_stmt : _IDNAME "func" _IDNAME
+size_stmt : 		"size <-" _INT _INT 
 
-function_stmt : func | func_list
+range_stmt : 		_IDNAME "<-" points 
+			|_IDNAME "<-" range
 
-func_list : "[" func ("," func)* "]"
+range : 		[range_descriptor] _NUMBER "to" _NUMBER
+
+range_descriptor:	_INT "in" 
+			| "continuous" 
+
+points : 		"[" _NUMBER ("," _NUMBER)* "]"
+
+subplot_stmt : 		"subplot" _INT ("," _INT)? "{" stmt_list "}"
+
+plotting_stmt : 	_IDNAME "func" _IDNAME
+
+function_stmt : 	func 
+			|func_list
+
+func_list : 		"[" func ("," func)* "]"
+
+func 	:		"func" //filler for testing purposes
