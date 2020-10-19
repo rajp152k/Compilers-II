@@ -20,4 +20,7 @@
 ```
 python eval.py  	# picks a random file from tests and proceeds
 python eval.py	--src relative_path # evaluate this file
+
+eg:
+python eval.py --src tests/basic_test.fu 
 ```
