@@ -1,51 +1,68 @@
-//
-// IMPORTS 
-// 
+start : (figure)+
+figure : "fig" fig_name "{" stmt_list "}"
 
-%import common.CNAME -> IDNAME
-%import common.NUMBER -> NUMBER
+fig_name : ID
+
+stmt_list : (stmt)+
+
+stmt :  size_stmt
+       | subplot_stmt
+       | plotting_stmt 
+       | range_stmt
+       | function_stmt
+
+size_stmt : "size <-" nrows ["," ncols]
+
+nrows : INT
+ncols : INT 
+
+range_stmt : variable "<-" (points | range)
+
+variable : ID
+
+range : [range_descriptor] from "to" end
+
+from : REAL
+end : REAL
+
+range_descriptor : INT "in" | "continuous" 
+points : "[" point ("," point)* "]"
+
+point : REAL
+
+subplot_stmt : "subplot" xindex ["," yindex] "{" subplot_stmt_list "}"
+
+subplot_stmt_list : (subplot_single_stmt)+
+
+subplot_single_stmt : plotting_stmt 
+			    | range_stmt
+			    | function_stmt
+
+xindex : INT
+yindex : INT
+
+plotting_stmt : dependent_variable "<-" "func" indendent_variable
+
+dependent_variable : ID
+indendent_variable : ID
+
+function_stmt : dependent_variable "<-" (single_function | function_list)
+
+single_function : function
+
+function : FUNCTION
+
+function_list : "[" function ("," function)* "]"
+
+FUNCTION : (LCASE_LETTER|REAL|PAREN|OPERATOR)+
+
+PAREN : "(" | ")"
+OPERATOR : "+" | "-" | "*" | "/" 
+
+ID : (LCASE_LETTER)+
+
+%import common.LCASE_LETTER
+%import common.SIGNED_NUMBER -> REAL
 %import common.INT -> INT
-%import common.WS -> _WS
-%ignore _WS
-
-// 
-// GRAMMAR 
-// 
-
-start:			figure+
-
-figure : 		"fig" IDNAME "{" stmt_list "}"
-
-////makeshift : for testing purposes : not final
-stmt_list :	  	stmt ("," stmt)*
-stmt:			size_stmt
-			|range_stmt
-			|subplot_stmt
-			|plotting_stmt
-			|function_stmt
-//// 
-
-
-
-size_stmt : 		"size <-" INT INT 
-
-range_stmt : 		IDNAME "<-" points 
-			|IDNAME "<-" range
-
-range : 		[range_descriptor] NUMBER "to" NUMBER
-
-range_descriptor:	INT "in" 
-			| "continuous" 
-
-points : 		"[" NUMBER ("," NUMBER)* "]"
-
-subplot_stmt : 		"subplot" INT ("," INT)? "{" stmt_list "}"
-
-plotting_stmt : 	IDNAME "func" IDNAME
-
-function_stmt : 	func 
-			|func_list
-
-func_list : 		"[" func ("," func)* "]"
-
-func 	:		"func" //filler for testing purposes
+%import common.WS
+%ignore WS
