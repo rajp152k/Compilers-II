@@ -23,4 +23,10 @@ else:
 assert(source.is_file() and source.suffix == '.fu')
 print(f'testing {source.name}')
 
-# actual evaluation code not initialized yet
+with open(source,'r') as f:
+    code_raw = f.read()
+
+# quick eval code for now: pretty prints program tree 
+
+parser = Lark(grammar_raw)
+print(parser.parse(code_raw).pretty())
