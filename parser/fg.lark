@@ -23,9 +23,7 @@ size_stmt : "size <-" nrows ["," ncols] [attr_list]
 nrows : INT
 ncols : INT 
 
-range_stmt : variable "<-" (points | range)
-
-variable : ID
+range_stmt : independent_variable "<-" (points | range)
 
 range : [range_descriptor] from "to" end
 
@@ -49,10 +47,10 @@ subplot_single_stmt : plotting_stmt
 			    | function_stmt
 
 
-plotting_stmt : dependent_variable "<-" "func" indendent_variable [attr_list]
+plotting_stmt : dependent_variable "<-" "func" independent_variable [attr_list]
 
 dependent_variable : ID
-indendent_variable : ID
+independent_variable : ID
 
 function_stmt : dependent_variable "<-" (single_function | function_list)
 
