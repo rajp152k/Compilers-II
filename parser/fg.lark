@@ -52,18 +52,19 @@ plotting_stmt : dependent_variable "<-" "func" independent_variable [attr_list]
 dependent_variable : ID
 independent_variable : ID
 
-function_stmt : dependent_variable "<-" (single_function | function_list)
+function_stmt : dependent_variable "<-" (function_expr | function_list)
 
-single_function : function
+function_list : "[" function_expr ("," function_expr)* "]"
 
-function : FUNCTION
+function_expr : 	function_expr OPERATOR function_expr 
+			| "(" function_expr ")"
+			| transcendental_func "(" function_expr ")"
+			| REAL
+			| independent_variable
 
-function_list : "[" function ("," function)* "]"
+transcendental_func :	ID
 
-FUNCTION : (LCASE_LETTER|REAL|PAREN|OPERATOR)+
-
-PAREN : "(" | ")"
-OPERATOR : "+" | "-" | "*" | "/" 
+OPERATOR : "+" | "-" | "*" | "/" | "^"
 
 ID : (LCASE_LETTER)+
 
