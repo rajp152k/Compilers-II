@@ -31,9 +31,9 @@ from : REAL
 end : REAL
 
 range_descriptor : INT "in" | "continuous" 
-points : "[" point ("," point)* "]"
 
-point : REAL
+points : "[" point ("," point)* "]"
+point : REAL | ESCAPED_STRING
 
 subplot_stmt : "subplot" [xindex ["," yindex]] "{" subplot_stmt_list "}"
 
@@ -68,15 +68,18 @@ OPERATOR : "+" | "-" | "*" | "/" | "^"
 
 ID : (LCASE_LETTER)+
 
-_STRING_INNER: /.*?/
-_STRING_ESC_INNER: _STRING_INNER /(?<!\\)(\\\\)*?/ 
-
-ESCAPED_STRING : ("\"" _STRING_ESC_INNER "\"") 
+ESCAPED_STRING : ("\"" _STRING_ESC_INNER "\"")
 				|("'" _STRING_ESC_INNER "'")
 				|("(" _STRING_ESC_INNER ")")
+
+//
+// IMPORTS
+//
 
 %import common.LCASE_LETTER
 %import common.SIGNED_NUMBER -> REAL
 %import common.INT -> INT
 %import common.WS
+%import common._STRING_INNER -> _STRING_INNER
+%import common._STRING_ESC_INNER -> _STRING_ESC_INNER
 %ignore WS
