@@ -1,6 +1,7 @@
 start : (figure)+
 figure : "fig" fig_name "{" stmt_list "}"
-fig_name: ID
+
+fig_name : ID
 
 attr_list : "{" attr ("," attr)* "}"
 attr : key ":" value
@@ -9,7 +10,7 @@ key : ID
 value : ATTR_VALUE
 ATTR_VALUE : ESCAPED_STRING|REAL
 
-stmt_list : (stmt)*
+stmt_list : (stmt)+
 
 stmt :  size_stmt
        | subplot_stmt
@@ -63,20 +64,17 @@ function_expr : 	function_expr OPERATOR function_expr
 
 transcendental_func :	ID
 
-OPERATOR : "+" | "-" | "*" | "/" | "^" | "%"
+OPERATOR : "+" | "-" | "*" | "/" | "^"
 
-ID : CNAME
+ID : (LCASE_LETTER)+
 
 ESCAPED_STRING : ("\"" _STRING_ESC_INNER "\"")
 				|("'" _STRING_ESC_INNER "'")
 				|("(" _STRING_ESC_INNER ")")
 
-
-COMMENT	: 	"#" /.*/
 //
 // IMPORTS
 //
-
 
 %import common.LCASE_LETTER
 %import common.SIGNED_NUMBER -> REAL
@@ -85,4 +83,3 @@ COMMENT	: 	"#" /.*/
 %import common._STRING_INNER -> _STRING_INNER
 %import common._STRING_ESC_INNER -> _STRING_ESC_INNER
 %ignore WS
-%ignore COMMENT
