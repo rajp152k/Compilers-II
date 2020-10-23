@@ -1,0 +1,12 @@
+# this programs tests the comments feature
+# define a figure named test
+fig test{ # marks the beginning of figure
+	# define the size of the grid (2x2)
+	size <- 2, 2
+	# define an independent variable x with values [1,10]
+	x <- 1 to 10
+	# define dependent variable y in terms of x
+	y <- x^2
+	# plot y as a function of x
+	y <- func x 
+} # marks the ending of figure

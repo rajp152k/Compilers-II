@@ -1,0 +1,2 @@
+# this program will test the operator precedence
+fig operator_precedence{ }
