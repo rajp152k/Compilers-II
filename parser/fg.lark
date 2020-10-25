@@ -1,88 +1,85 @@
-start : (figure)+
-figure : "fig" fig_name "{" stmt_list "}"
-fig_name: ID
+start 			: (figure)+
+figure 			: "fig" fig_name "{" stmt_list "}"
+fig_name		: ID
 
-attr_list : "{" attr ("," attr)* "}"
-attr : key ":" value
+stmt_list 		: (stmt)*
+stmt 			: size_stmt
+       			| range_stmt
+       			| function_stmt
+       			| plotting_stmt 
+       			| subplot_stmt
 
-key : ID
-value : ATTR_VALUE
-ATTR_VALUE : ESCAPED_STRING|REAL
 
-stmt_list : (stmt)*
+size_stmt 		: "size" "<-" nrows ["," ncols] [attr_list]
+				| "size" "<-" "(" nrows "," ncols ")" [attr_list]
+nrows 			: INT
+ncols 			: INT 
 
-stmt :  size_stmt
-       | subplot_stmt
-       | plotting_stmt 
-       | range_stmt
-       | function_stmt
+range_stmt 		: independent_variable "<-" (points | range)
+range 			: start_int "to" end_int
+				| "(" start_int "to" end_int ")"
+				| range_desc from "to" end
+				| range_desc "(" from "to" end ")"
+				| "(" range_desc from "to" end ")"
+				| "(" range_desc "(" from "to" end ")" ")"
+start_int		: INT 
+				| SIGNED_INT
+end_int 		: INT
+				| SIGNED_INT 
+from 			: REAL
+end 			: REAL
+range_desc 		: INT "in" | "continuous" 
+points 			: "[" number_point ("," number_point)* "]"
+				| "[" string_point ("," string_point)* "]"
+number_point	: REAL
+string_point	: ESCAPED_STRING
 
-size_stmt : "size <-" nrows ["," ncols] [attr_list]
 
-nrows : INT
-ncols : INT 
 
-range_stmt : independent_variable "<-" (points | range)
+dependent_variable 		: ID
+independent_variable 	: ID
+transcendental_func 	: ID
+function_stmt 			: dependent_variable "<-" (function_expr | function_list)
+function_list 			: "[" function_expr ("," function_expr)* "]"
+function_expr 			: function_expr OPERATOR function_expr 
+						| "(" function_expr ")"
+						| transcendental_func "(" function_expr ")"
+						| REAL
+						| independent_variable
 
-range : [range_descriptor] from "to" end
 
-from : REAL
-end : REAL
-
-range_descriptor : INT "in" | "continuous" 
-
-points : "[" point ("," point)* "]"
-point : REAL | ESCAPED_STRING
-
-subplot_stmt : "subplot" [xindex ["," yindex]] "{" subplot_stmt_list "}"
-
-xindex : INT
-yindex : INT
-
-subplot_stmt_list : (subplot_single_stmt)+
-
+plotting_stmt 		: dependent_variable "<-" "func" independent_variable [attr_list]
+subplot_stmt 		: "subplot" [xindex ["," yindex]] "{" subplot_stmt_list "}"
+					| "subplot" "(" xindex "," yindex ")" "{" subplot_stmt_list "}"
+xindex 				: INT
+yindex 				: INT
+subplot_stmt_list 	: (subplot_single_stmt)+
 subplot_single_stmt : plotting_stmt 
-			    | range_stmt
-			    | function_stmt
+			    	| range_stmt
+			    	| function_stmt
 
 
-plotting_stmt : dependent_variable "<-" "func" independent_variable [attr_list]
-
-dependent_variable : ID
-independent_variable : ID
-
-function_stmt : dependent_variable "<-" (function_expr | function_list)
-
-function_list : "[" function_expr ("," function_expr)* "]"
-
-function_expr : 	function_expr OPERATOR function_expr 
-			| "(" function_expr ")"
-			| transcendental_func "(" function_expr ")"
-			| REAL
-			| independent_variable
-
-transcendental_func :	ID
-
-OPERATOR : "+" | "-" | "*" | "/" | "^" | "%"
-
-ID : CNAME
-
-ESCAPED_STRING : ("\"" _STRING_ESC_INNER "\"")
-				|("'" _STRING_ESC_INNER "'")
-				|("(" _STRING_ESC_INNER ")")
+attr_list 		: "{" attr ("," attr)* "}"
+attr 			: key ":" value
+key 			: ID
+value 			: ATTR_VALUE
+ATTR_VALUE 		: ESCAPED_STRING | REAL
+OPERATOR 		: "+" | "-" | "*" | "/" | "^" | "%"
+ID 				: CNAME
+ESCAPED_STRING 	: ("\"" _STRING_ESC_INNER "\"")
+				| ("'" _STRING_ESC_INNER "'")
+				| ("(" _STRING_ESC_INNER ")")
+COMMENT			: 	"#" /.*/
 
 
-COMMENT	: 	"#" /.*/
-//
 // IMPORTS
-//
-
-
 %import common.LCASE_LETTER
 %import common.SIGNED_NUMBER -> REAL
 %import common.INT -> INT
 %import common.WS
 %import common._STRING_INNER -> _STRING_INNER
 %import common._STRING_ESC_INNER -> _STRING_ESC_INNER
+%import common.CNAME
+%import common.SIGNED_INT
 %ignore WS
 %ignore COMMENT

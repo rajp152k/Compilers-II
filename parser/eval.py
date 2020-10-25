@@ -8,7 +8,7 @@ args = prs.parse_args()
 
 
 # importing grammar
-fg = Path('./fg1.lark')
+fg = Path('./fg.lark')
 assert(fg.is_file())
 with open(fg,'r') as f:
     grammar_raw = f.read()
