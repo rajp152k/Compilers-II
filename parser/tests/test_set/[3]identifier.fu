@@ -1,0 +1,7 @@
+# This programs tests the identifiers for figure name
+fig my_fig{ }
+fig my_fig1{ }
+fig my_fig2{ }
+fig squaredFigure{ }
+fig _specialFigure{ }
+fig FIG{ }
