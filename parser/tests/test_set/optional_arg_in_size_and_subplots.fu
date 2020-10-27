@@ -1,0 +1,17 @@
+fig myfig{
+	
+	# By default this creates subplots with dimension 1,4
+	size <- 2
+
+	# No need to write 0,1
+	subplot 1{
+		y <- x
+		x <- 1 to 10
+		y <- func x
+	}
+
+	y <- x^2
+	x <- 2 to 10
+	y <- func x
+
+}

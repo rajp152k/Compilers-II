@@ -15,6 +15,6 @@ fig functional_list{
 	# define the functional list
 	y <- [x, x^2, x^3, sin(x), log(x), exp(x)]
 
-	# plot all the curves in the same slot
+	# plot all the curves in the same plot
 	y <- func x
 }

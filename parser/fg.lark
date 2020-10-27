@@ -16,16 +16,12 @@ nrows 			: INT
 ncols 			: INT 
 
 range_stmt 		: independent_variable "<-" (points | range)
-range 			: start_int "to" end_int
-				| "(" start_int "to" end_int ")"
+range 			: from "to" end
+				| "(" from "to" end ")"
 				| range_desc from "to" end
 				| range_desc "(" from "to" end ")"
 				| "(" range_desc from "to" end ")"
 				| "(" range_desc "(" from "to" end ")" ")"
-start_int		: INT 
-				| SIGNED_INT
-end_int 		: INT
-				| SIGNED_INT 
 from 			: REAL
 end 			: REAL
 range_desc 		: INT "in" | "continuous" 
@@ -72,14 +68,32 @@ ESCAPED_STRING 	: ("\"" _STRING_ESC_INNER "\"")
 COMMENT			: 	"#" /.*/
 
 
-// IMPORTS
-%import common.LCASE_LETTER
-%import common.SIGNED_NUMBER -> REAL
-%import common.INT -> INT
-%import common.WS
-%import common._STRING_INNER -> _STRING_INNER
-%import common._STRING_ESC_INNER -> _STRING_ESC_INNER
-%import common.CNAME
-%import common.SIGNED_INT
+
+LCASE_LETTER    : "a".."z"
+UCASE_LETTER    : "A".."Z"
+
+LETTER          : UCASE_LETTER | LCASE_LETTER
+
+CNAME           : ("_"|LETTER) ("_"|LETTER|DIGIT)*
+
+DIGIT           : "0".."9"
+
+INT             : DIGIT+
+SIGNED_INT      : ["+"|"-"] INT
+DECIMAL         : INT "." INT? | "." INT
+
+_EXP            : ("e"|"E") SIGNED_INT
+FLOAT           : INT _EXP | DECIMAL _EXP?
+
+NUMBER          : FLOAT | INT
+REAL		    : ["+"|"-"] NUMBER 
+
+
+_STRING_INNER       : /.*?/
+_STRING_ESC_INNER   : _STRING_INNER /(?<!\\)(\\\\)*?/
+
+
+WS: /[ \t\f\r\n]/+
+
 %ignore WS
 %ignore COMMENT
