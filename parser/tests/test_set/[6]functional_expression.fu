@@ -37,13 +37,13 @@ fig functional_expressions {
 	f8 <- (exp(-1*(10 + x))/(10 + x))*(sin(20 * (x ^ 0.5)))*(x % 3)
 
 	# plot all the curves
-	f1 <- x
-	f2 <- x
-	f3 <- x
-	f4 <- x
-	f5 <- x
-	f6 <- x
-	f7 <- x
-	f8 <- x
+	f1 <- func x
+	f2 <- func x
+	f3 <- func x
+	f4 <- func x
+	f5 <- func x
+	f6 <- func x
+	f7 <- func x
+	f8 <- func x
 }
 

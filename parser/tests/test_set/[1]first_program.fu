@@ -28,10 +28,10 @@ fig my_figure{
 	z <- log(t)
 
 	# plot y and g as functions of x
-	y <- x
-	g <- x
+	y <- func x
+	g <- func x
 
 	# plot w and z as functions of t
-	w <- t
-	z <- t
+	w <- func t
+	z <- func t
 }
