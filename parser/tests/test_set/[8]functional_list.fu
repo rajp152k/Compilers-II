@@ -1,0 +1,20 @@
+#------------------------------------------------------
+# This program tests the functional list functionality
+#------------------------------------------------------
+
+
+# define the figure
+fig functional_list{
+
+	# define the size of the grid
+	size <- 1, 1
+
+	# define the independent variable
+	x <- [1, 2, 3, 4, 5]
+
+	# define the functional list
+	y <- [x, x^2, x^3, sin(x), log(x), exp(x)]
+
+	# plot all the curves in the same slot
+	y <- func x
+}

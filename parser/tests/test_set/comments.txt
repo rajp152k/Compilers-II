@@ -1,0 +1,30 @@
+LARK changes:
++Added support for single line python comments
++Added % operator
+<-> stmt_list could be empty
+ID <-> common.CNAME
+
+
+Queries:
+[Generated new Issue]
+why don't we allow list of functions to be list of independent variables?
+e.g. f1, f2, f3, ..., fn are defined using functional expressions
+and then say plot all these functions as functions of x
+e.g.
+f1 <-x
+f2 <-x
+....
+fn <-x
+Instead we could say
+f <- [f1, f2, ..., fn]
+f <- x
+(this saves space I guess)
+(checkout test_set/[6]functional_expression.fu)
+
+******************
+Are we allowing composed functions?
+t <- [1, 2, 3, 4, 5]
+x <- t^2
+y <- sin(x)
+z <- log(y)
+Is this allowed?
