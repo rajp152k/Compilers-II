@@ -1,0 +1,45 @@
+fig my_figure{
+
+	# define the size
+	size <- 3,3
+
+	x <- [1, 2, 3, 4, 5]
+	y := x^2
+	#print(x, y)
+	# occupy first empty cell in row-major fashion
+	plot(x,y)
+
+	x <- (-PI, PI)
+	y := sin(x)
+	z := cos(x)
+	#print(x,y)
+	plot(x,y, {
+		row:2,col:2, 
+		title:"sin(x) plot", 
+		xlabel:"x", 
+		ylabel:"sin(x)/cos(x)", 
+		label: 'sin(x)'})
+	plot(x,z, {
+		row:2,col:2, 
+		title:"sin(x) plot", 
+		xlabel:"x", 
+		ylabel:"sin(x)/cos(x)", 
+		label: "cos(x)"})
+
+	x <- (1, 10)
+	y := log(x)
+	#print(x,y)
+	# must occupy 2nd row
+	plot(x, y, {row:2})
+
+	x <- (1, 10)
+	y := exp(x)
+	#print(x,y)
+	# must occupy 3rd column
+	plot(x,y, {col:3})
+
+
+
+	# displays the figure
+	show_plots()
+}

@@ -1,71 +1,57 @@
-start 			: (figure)+
-figure 			: "fig" fig_name "{" stmt_list "}"
-fig_name		: ID
+start 			: "fig" ID "{" stmt_list "}"	-> figure
 
 stmt_list 		: (stmt)*
 stmt 			: size_stmt
        			| range_stmt
        			| function_stmt
        			| plotting_stmt 
-       			| subplot_stmt
+       			| print_stmt
+       			| show_plots
 
 
-size_stmt 		: "size" "<-" nrows ["," ncols] [attr_list]
-				| "size" "<-" "(" nrows "," ncols ")" [attr_list]
-nrows 			: INT
-ncols 			: INT 
+size_stmt 	: "size" "<-" INT ["," INT] [attr_list]			-> size_stmt
+			| "size" "<-" "(" INT "," INT ")" [attr_list] 	-> size_stmt
 
-range_stmt 		: independent_variable "<-" (points | range)
-range 			: from "to" end
-				| "(" from "to" end ")"
-				| range_desc from "to" end
-				| range_desc "(" from "to" end ")"
-				| "(" range_desc from "to" end ")"
-				| "(" range_desc "(" from "to" end ")" ")"
-from 			: REAL
-end 			: REAL
-range_desc 		: INT "in" | "continuous" 
-points 			: "[" number_point ("," number_point)* "]"
-				| "[" string_point ("," string_point)* "]"
-number_point	: REAL
-string_point	: ESCAPED_STRING
+range_stmt 	: ID "<-" (points | range)					-> range_stmt
+range 		: SIGNED_INT "to" SIGNED_INT 				-> range_int_to_int
+			| "(" SIGNED_INT "to" SIGNED_INT ")"		-> range_int_to_int
+			| "(" expr "," expr ")" ("step" expr)?		-> range_real_to_real
+expr		: expr OPERATOR expr 						-> expr_op_expr
+			| "(" expr ")"								-> nested_expr
+			| "-" expr 									-> expr_negation
+			| REAL 										-> expr_real
+			| CONST 									-> expr_const
+
+points 		: "[" REAL ("," REAL)* "]"						-> real_points_list
+			| "[" ESCAPED_STRING ("," ESCAPED_STRING)* "]"	-> str_points_list
 
 
 
-dependent_variable 		: ID
-independent_variable 	: ID
-transcendental_func 	: ID
-function_stmt 			: dependent_variable "<-" (function_expr | function_list)
-function_list 			: "[" function_expr ("," function_expr)* "]"
-function_expr 			: function_expr OPERATOR function_expr 
-						| "(" function_expr ")"
-						| transcendental_func "(" function_expr ")"
-						| REAL
-						| independent_variable
+function_stmt 	: ID ":=" function_expr 					-> func_stmt
+function_expr 	: function_expr OPERATOR function_expr 		-> func_op_func
+				| "(" function_expr ")"						-> nested_func
+				| ID "(" function_expr ")"					-> func_call
+				| REAL 										-> func_real
+				| ID										-> func_id
+				| CONST										-> func_const
+				| "-" function_expr							-> func_negation
 
-
-plotting_stmt 		: dependent_variable "<-" "func" independent_variable [attr_list]
-subplot_stmt 		: "subplot" [xindex ["," yindex]] "{" subplot_stmt_list "}"
-					| "subplot" "(" xindex "," yindex ")" "{" subplot_stmt_list "}"
-xindex 				: INT
-yindex 				: INT
-subplot_stmt_list 	: (subplot_single_stmt)+
-subplot_single_stmt : plotting_stmt 
-			    	| range_stmt
-			    	| function_stmt
-
+plotting_stmt 		: "plot" "(" ID "," ID ("," [attr_list])? ")"	-> plt_stmt
+print_stmt		:	"print" "(" ID ("," ID)* ")" -> print_stmt
+show_plots		: 	"show_plots" "(" ")" -> show_plots
 
 attr_list 		: "{" attr ("," attr)* "}"
-attr 			: key ":" value
-key 			: ID
-value 			: ATTR_VALUE
+attr 			: ID ":" ATTR_VALUE							-> attribute
 ATTR_VALUE 		: ESCAPED_STRING | REAL
 OPERATOR 		: "+" | "-" | "*" | "/" | "^" | "%"
-ID 				: CNAME
 ESCAPED_STRING 	: ("\"" _STRING_ESC_INNER "\"")
 				| ("'" _STRING_ESC_INNER "'")
 				| ("(" _STRING_ESC_INNER ")")
 COMMENT			: 	"#" /.*/
+
+
+
+CONST 	: "PI" | "EXP"
 
 
 
@@ -74,12 +60,12 @@ UCASE_LETTER    : "A".."Z"
 
 LETTER          : UCASE_LETTER | LCASE_LETTER
 
-CNAME           : ("_"|LETTER) ("_"|LETTER|DIGIT)*
+ID 		        : ("_"|LETTER) ("_"|LETTER|DIGIT)*
 
 DIGIT           : "0".."9"
 
 INT             : DIGIT+
-SIGNED_INT      : ["+"|"-"] INT
+SIGNED_INT      : ["+"|"-"] DIGIT+
 DECIMAL         : INT "." INT? | "." INT
 
 _EXP            : ("e"|"E") SIGNED_INT
