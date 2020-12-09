@@ -1,0 +1,43 @@
+# This script demonstrate the ways
+# in which we can write range-statements
+
+fig my_figure{ 
+
+	# a comma separated list of numbers
+	x <- [1.0, 2.5, 3.0, 4.5, 5.0]
+
+	# a comma separated list of strings
+	x <- ['a', 'b', 'c', 'd', '']
+
+	# NOTE: range of values in interval (a, b) both
+	# a and b are inclusive
+	# case 1: bounds and jump can be treated as integers
+	# ranges will automatically be generated based on bounds
+	x <- (10, 20)
+	x <- (5, -5)
+	x <- (5, 5)
+	x <- (10.0, 20.0)
+	x <- (10.0/2, 2*10)
+	# you can optionally provide the steps
+	x <- (10, 20) step 2
+	x <- (-5, 5) step 3
+
+
+	# case 2: at least one of the bounds 
+	# cannot be treated as integer
+	# ranges will be generated with diff of 0.1
+	# if not explicitly specified
+	x <- (1.5, 2.5)
+	x <- (2.5, 1.5)
+	x <- (1.0, 2.0) step 0.2
+
+	# you can also use mathematical constants
+	x <- (-PI, PI)
+	x <- (-PI/4, PI/4)
+	x <- (0, 2*PI)
+	x <- (10 + 20, 10 + 30)
+	x <- (-EXP, EXP)
+
+	# TODO: Write as many complicated ranges as you can
+	# and see if they works fine
+}

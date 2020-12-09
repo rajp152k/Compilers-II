@@ -1,0 +1,17 @@
+# This program tests the plotting
+# TODO: attr-list has to be configured further!
+
+fig figure1{
+	x <- (-PI, PI)
+	y := sin(x)
+	plot(x, y, {title='sine function'})
+}
+
+fig figure2{
+	size <- 2
+	x <- (-PI, PI)
+	y := sin(x)
+	z := cos(x)
+	plot(x, y, {title='sine function'})
+	plot(x, z, {title='consine function'})
+}

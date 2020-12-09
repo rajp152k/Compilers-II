@@ -1,0 +1,5 @@
+# A *.fu file may contain zero or more figure
+# and hence a file containing one figure is valid
+# though the figure doesn't create anything here!
+
+fig figure{ }

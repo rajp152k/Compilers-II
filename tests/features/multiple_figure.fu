@@ -1,0 +1,7 @@
+# A *.fu file may contain zero or more figure and 
+# hence a file containing more than one figures is 
+# valid though the figure doesn't create anything here!
+
+fig figure1{ }
+fig figure2{ }
+fig figure3{ }
