@@ -1,0 +1,26 @@
+# An identifier must satisfy the following:
+# It can ONLY contain alphabets, digits and underscore
+# It cannot start with digit
+# Keywords cannot be used as identifiers
+# Identifiers are case-sensitive
+
+# Following names are valid
+fig figure1{ }
+fig sineCosineFigure{ } 
+fig sine_cosine_figure{ }
+fig _special_figure{ }
+
+# All the following are different figureIds
+fig abc{ }
+fig Abc{ }
+fig ABc{ }
+fig aBC{ }
+
+
+# Following names are invalid
+fig 1figure{ } # cannot start with digit
+fig sine Cosine Figure { } # ONLY alphabets, digits and _
+fig sine-cosine-figure{ } # ONLY alphabets, digits and _
+fig fig{ } # Keyword cannot be used as identifiers
+
+

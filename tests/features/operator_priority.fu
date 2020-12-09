@@ -1,0 +1,4 @@
+# This program tests the priority of operators
+fig figure{
+	# TODO: We haven't specified the priorities yet
+}

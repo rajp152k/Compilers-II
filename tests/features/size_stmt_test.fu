@@ -1,0 +1,19 @@
+# This script demonstrates the ways 
+# in which we can define the size 
+
+fig my_figure{
+	# size with only number of rows
+	size <- 2
+
+	# size with number of rows and cols
+	size <- 2, 3
+
+	# size with number of rows and cols with parens
+	size <- (2, 3)
+
+	# size statement may contains configurations
+	# in all the above three cases
+	size <- 2 {width=12, height=6}
+	size <- 2, 3 {width=12, height=6, sharex=true}
+	size <- (2, 3) {width=12, height=6, sharey=true}
+}
