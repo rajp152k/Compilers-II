@@ -1,0 +1,15 @@
+# This programs demonstrates the scoping of variables
+fig figure1{
+	# ERROR: trying to access a 
+	# variable before it is declared
+	y := x^2 
+	x <- [1, 2, 3, 4, 6]
+}
+
+fig figure2{
+	# variables declared in one figure
+	# are not accessible to others
+	# variable x was declared in figure1
+	# and is not accessible to figure2
+	z := x^2
+}

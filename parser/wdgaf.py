@@ -1,5 +1,6 @@
 # necessary imports
 import sys
+import logging
 from pathlib import Path
 from lark import Lark
 import lark
@@ -9,6 +10,9 @@ import argparse
 
 # driver function
 def main():
+	# set level to critical
+	logging.getLogger().setLevel(logging.CRITICAL)
+
 	# Import grammar and create parser
 	grammar = Path('./grammar/grammar.lark')
 	assert(grammar.is_file())
@@ -17,8 +21,8 @@ def main():
 	parser = Lark(raw_grammar, parser="lalr", transformer=ProcessTree())
 
 	# create argument parser
-	args_parser = argparse.ArgumentParser()
-	args_parser.add_argument('-s', '--src', help='source file')
+	args_parser = argparse.ArgumentParser(description='Interpreter for WDGAF language', epilog="And that's how you use the interepreter")
+	args_parser.add_argument('src', metavar='src', help='source file path')
 	args_parser.add_argument('-v', '--verbose', help="generates verbose output", action="store_true")
 
 	# get the arguments

@@ -1,3 +1,7 @@
+# necessary imports
+from matplotlib.colors import is_color_like
+
+
 # returns the first empty-cell (if any otherwise last cell)
 # index returned are 1-based
 def first_empty_cell(grid, start_row=0, start_col=0):
@@ -15,21 +19,35 @@ def first_empty_cell(grid, start_row=0, start_col=0):
 
 # creates a plot with given values on given axes
 # TODO: parse the props and add to plot statement
-def plot(xs, ys, ax, props):
+def plot(xs, ys, zs, ax, props):
 	# TODO: read props and apply properties
 	title = props.get('title', None)
 	x_label = props.get('xlabel', None)
 	y_label = props.get('ylabel', None)
 	label = props.get('label', None)
+
+
+	color = props.get('color', 'black')
+	if color != None and not is_color_like(color):
+		raise Exception('Illegal value {} for parameter color'.format(color))
+	
+	level = props.get('level', None)
+	if (level != "single" and level != "multiple" and level != None):
+		raise Exception('Illegal value {} for parameter level'.format(all_level))
+
 	if title: ax.set_title(title)
 	if x_label: ax.set_xlabel(x_label)
 	if y_label: ax.set_ylabel(y_label)
 	if label:	ax.set_label(label)
-	ax.plot(xs, ys, label=label)
+	if zs is not None:
+		if level == "multiple": ax.contour(xs, ys, zs)
+		else: ax.contour(xs, ys, zs, [0])
+	else: 
+		ax.plot(xs, ys, label=label, color=color)
 
 
 # creates the plot for the user
-def create_plot(ax, grid, xs, ys, attr_list):
+def create_plot(ax, grid, xs, ys, zs=None, attr_list=None):
 	# fetch the number or rows and cols
 	rows, cols = grid.shape
 	# fetch the first non-empty cell
@@ -82,13 +100,13 @@ def create_plot(ax, grid, xs, ys, attr_list):
 	# find appropriate indexing
 	if rows == 1 and cols == 1:
 		# axis cannot be subscript
-		plot(xs, ys, ax, attr_list)
+		plot(xs, ys, zs, ax, attr_list)
 	elif rows == 1 or cols == 1:
 		# axis can be subscript using one index
-		plot(xs, ys, ax[row * col - 1], attr_list)
+		plot(xs, ys, zs, ax[row * col - 1], attr_list)
 	else:
 		# axis can be subscript using both index
-		plot(xs, ys, ax[row - 1][col - 1], attr_list)
+		plot(xs, ys, zs, ax[row - 1][col - 1], attr_list)
 
 	# occupy this location
 	grid[row - 1][col - 1] = 1.0
