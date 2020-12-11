@@ -30,11 +30,14 @@ def parse_list(type, points):
 	items = []
 	# iterate through every point
 	for point in points:
-		if type == str:
-			val = str(point)
-			val = val[1:-1]
-			items.append(val)
-		else: items.append(type(point))
+		str_point = str(point)
+		if str_point.isnumeric(): items.append(float(str_point))
+		else: items.append(str_point[1:-1])
+		# if type == str:
+		# 	val = str(point)
+		# 	val = val[1:-1]
+		# 	items.append(val)
+		# else: items.append(type(point))
 	# return the list
 	return np.array(items)
 
@@ -45,14 +48,14 @@ def create_range_with_jump(start, end, jump, isInt):
 	# take decision based on jump
 	if not jump:
 		# get the boundary
-		j = 1 if isInt else 0.1
+		j = 1 if isInt else 0.01
 		# jump is not provided so we create range
 		# based on bounds with jumps to be 1
 		if start <= end: return np.arange(start, end + j, j)
 		else: return np.arange(start, end - j, -j)
 	else:
 		# get the boundary
-		j = 1 if isInt and jump.is_integer() else 0.1
+		j = 1 if isInt and jump.is_integer() else 0.01
 		# jump is provided so we take care of it
 		if jump == 0: raise Exception("step must be non-zero for range")
 		elif jump < 0:

@@ -19,9 +19,8 @@ class ProcessTree(Transformer):
 		# start with an empty list of variables
 		self.rows = 1
 		self.cols = 1
-		self.fig_id = "We Do Give A Figure"
 		self.vars = {}
-		self.fig, self.ax = plt.subplots(1,1)
+		self.fig, self.ax = plt.subplots(1,1, constrained_layout=True, num="We Do Give A Figure")
 		self.grid = np.zeros((1,1))
 
 
@@ -33,14 +32,22 @@ class ProcessTree(Transformer):
 	def figure_stmt(self, fig_id=None, *stmt_list):
 		# fig_id must be provided
 		if not fig_id:	raise Exception("FigureId must be provided")
-		# update the figure
-		self.fig_id = fig_id
 		# generate verbose message
 		if config['verbose']: print("figId := {}".format(fig_id))
+		# update the title
+		self.fig.suptitle("[{}]".format(fig_id))
 		# display the plots
-		plt.tight_layout()
 		plt.legend()
 		plt.show()
+
+		# # reset-params
+		self.rows = 1
+		self.cols = 1
+		self.vars = {}
+		self.fig, self.ax = plt.subplots(1,1)
+		self.grid = np.zeros((1,1))
+		# close all - IMPORTANT
+		plt.close('all')
 
 
 
@@ -50,8 +57,9 @@ class ProcessTree(Transformer):
 		# parse the rows and cols
 		self.rows, self.cols = futil.parse_size(rows, None)
 		# create subplots
-		self.fig, self.ax = plt.subplots(self.rows, self.cols)
+		self.fig, self.ax = plt.subplots(self.rows, self.cols, constrained_layout=True, num='We Do Give a Figure')
 		self.grid = np.zeros((self.rows, self.cols))
+		# TODO: configuration of size using attr-list
 		# generate verbose message
 		if config['verbose']:
 			print("rows := {}, cols := {}, attr_list := {}".format(rows, 1, attr_list))
@@ -121,6 +129,8 @@ class ProcessTree(Transformer):
 		self.vars[var_id] = items
 		# generate verbose message
 		if config['verbose']: print("{} := {}".format(var_id, items))
+		# return the tuple containing var_id, items
+		return (var_id, items)
 
 
 
@@ -157,10 +167,15 @@ class ProcessTree(Transformer):
 		# take unary negation
 		return np.multiply(item, -1)
 
-	# func_call alias 
-	def func_call(self, func_name, item):
+	# func_call_unary alias 
+	def func_call_unary(self, func_name, item):
 		# invoke the given function 
-		return fmath.invoke_function(func_name, item)
+		return fmath.invoke_unary_function(func_name, item)
+
+	# func_call_binary alias 
+	def func_call_binary(self, func_name, item1, item2):
+		# invoke the given function 
+		return fmath.invoke_binary_function(func_name, item1, item2)
 
 	# nested_func alias
 	def nested_func(self, expression):
@@ -190,9 +205,10 @@ class ProcessTree(Transformer):
 		for var_id in var_ids:
 			# get the string representation from Token
 			var_id = str(var_id)
-			# validate id
-			if var_id not in self.vars: raise Exception("Unknown parameter {}".format(var_id))
-			print("{} = {}".format(var_id, self.vars[var_id]))
+			if var_id in self.vars:
+				print("{} = {}".format(var_id, self.vars[var_id]))
+			else:
+				raise Exception("Unknown parameter {}".format(var_id))
 
 
 	# plt_stmt alias	
@@ -208,9 +224,47 @@ class ProcessTree(Transformer):
 		ys = self.vars[y_id]
 		props = {}
 		for item in attr_list: props = item
-		fplot.create_plot(self.ax, self.grid, xs, ys, props)
+		fplot.create_plot(self.ax, self.grid, xs, ys, None, props)
 
 
+	########################### CONTOUR ###########
+	def contour_grid(self, id_x, id_y, startx, endx, starty, endy):
+		startx = float(startx)
+		starty = float(starty)
+		endx = float(endx)
+		endy = float(endy)
+		if startx > endx: raise Exception("startx must be at least endx for countour")
+		if starty > endy: raise Exception("starty must be at least endy for countour")
+		x = np.arange(startx, endx, 0.01)
+		y = np.arange(starty, endy, 0.01)
+		X, Y = np.meshgrid(x, y)
+		self.vars[id_x] = X
+		self.vars[id_y] = Y
+		# generate verbose message
+		if config['verbose']: print("{} := {}\n {} := {}".format(id_x, X, id_y, Y))
+
+	def contour_stmt(self, x_id, y_id, items, *attr_list):
+		# get the string representation from Token
+		x_id = str(x_id)
+		y_id = str(y_id)
+		# validate values
+		if x_id not in self.vars:	raise Exception("Unknown parameter {}".format(x_id))
+		if y_id not in self.vars:	raise Exception("Unknown parameter {}".format(y_id))
+		# fetch values
+		xs = self.vars[x_id]
+		ys = self.vars[y_id]
+		props = {}
+		for item in attr_list: props = item
+		fplot.create_plot(self.ax, self.grid, xs, ys, items, props)
+		# generate verbose message
+		if config['verbose']: print("eqn := {}".format(items))
+
+
+
+	########################### OPERATOR ###########
+	# grabs and returns the operator
+	def operator(self, op):
+		return op
 
 
 	########################### ATTR LIST ###########
@@ -220,7 +274,9 @@ class ProcessTree(Transformer):
 
 	# grabs and returns the attribute
 	def attribute(self, key, value):
-		return (str(key), str(value))
+		key, value = str(key), str(value)
+		if value.isnumeric():	return (key, float(value))
+		else:	return (key, value[1:-1])
 
 
 
@@ -232,19 +288,4 @@ class ProcessTree(Transformer):
 			raise Exception("Illegal use of reserved word {}".format(var_id))
 		# return the variable id
 		return var_id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

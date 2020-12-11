@@ -1,12 +1,14 @@
-start 			: (figure)*
-figure			:"fig" id "{" stmt_list "}"	-> figure_stmt
+start 		: (figure_stmt)*
+figure_stmt	:"fig" id "{" stmt_list "}"	-> figure_stmt
 
-stmt_list 		: (stmt)*
-stmt 			: size_stmt
-       			| range_stmt
-       			| function_stmt
-       			| plot_stmt 
-       			| print_stmt
+stmt_list 	: (stmt)*
+stmt 		: size_stmt
+       		| range_stmt
+       		| function_stmt
+       		| plot_stmt 
+       		| contour_grid
+       		| contour_stmt
+       		| print_stmt
 
 
 
@@ -18,12 +20,12 @@ size_stmt : "size" "<-" INT [attr_list] -> size_row_stmt
 
 
 
-range_stmt 	: id "<-" (points | range)	-> range_stmt
+range_stmt 	: id "<-" points 	-> range_stmt
+			| id "<-" range		-> range_stmt
 points 	: "[" REAL ("," REAL)* "]"	-> real_points_list
 		| "[" ESC_STR ("," ESC_STR)* "]" -> str_points_list
-
 range : "(" expr "," expr ")" ("step" expr)? -> range_expr
-expr 	: expr OPERATOR expr 	-> expr_op_expr
+expr 	: expr operator expr 	-> expr_op_expr
 		| "(" expr ")"			-> nested_expr
 		| "-" expr 				-> expr_negation
 		| REAL 					-> expr_real
@@ -32,11 +34,12 @@ expr 	: expr OPERATOR expr 	-> expr_op_expr
 
 
 
-function_stmt 	: id ":=" fn_expr -> func_stmt
-fn_expr : fn_expr OPERATOR fn_expr -> func_op_func
-		| "(" fn_expr ")"	-> nested_func
-		| "-" fn_expr	-> func_negation
-		| id "(" fn_expr ")" -> func_call
+function_stmt 	: id ":=" fn_expr 	-> func_stmt
+fn_expr : fn_expr operator fn_expr 	-> func_op_func
+		| "(" fn_expr ")"			-> nested_func
+		| "-" fn_expr				-> func_negation
+		| id "(" fn_expr ")" 		-> func_call_unary
+		| id "(" fn_expr "," fn_expr ")" 	-> func_call_binary
 		| REAL -> func_real
 		| id -> func_id
 		| CONST -> func_const
@@ -44,60 +47,48 @@ fn_expr : fn_expr OPERATOR fn_expr -> func_op_func
 
 
 
+plot_stmt : "plot" "(" id "," id ("," attr_list)? ")"	-> plt_stmt
+contour_grid: id "," id "<-" "contour_grid" "(" REAL "," REAL "," REAL "," REAL ")" -> contour_grid
+contour_stmt: "contour" "(" id "," id "," fn_expr ("," attr_list)? ")" -> contour_stmt
 
 
 
-plot_stmt 	: "plot" "(" id "," id ("," [attr_list])? ")"	-> plt_stmt
+operator: 	PR_ONE 		-> operator
+		|	PR_TWO 		-> operator 
+		|	PR_THREE 	-> operator
+PR_ONE.1: "+" | "-"
+PR_TWO.2: "*" | "/" | "%"
+PR_THREE.3: "^"
 
-
-print_stmt		:	"print" "(" id ("," id)* ")" -> print_stmt
+print_stmt	:	"print" "(" id ("," id)* ")" -> print_stmt
 
 attr_list 		: "{" attr ("," attr)* "}"
 attr 			: id "=" ATTR_VALUE		-> attribute
+id 		        : ID 		-> identifier
+
+
+
+
 ATTR_VALUE 		: ESC_STR | REAL | BOOLEAN
 BOOLEAN			: "true" | "false"
-
-
-
-
-
-
-OPERATOR 		: "+" | "-" | "*" | "/" | "^" | "%"
 COMMENT			: 	"#" /.*/
-
-
-
-CONST 	: "PI" | "EXP"
-
-
-
+CONST 			: UCASE_LETTER+
 LCASE_LETTER    : "a".."z"
 UCASE_LETTER    : "A".."Z"
-
 LETTER          : UCASE_LETTER | LCASE_LETTER
-
-id 		        : ID 		-> identifier
 ID 				: ("_"|LETTER) ("_"|LETTER|DIGIT)*
-
 DIGIT           : "0".."9"
-
 INT             : DIGIT+
-SINT      : ["+"|"-"] DIGIT+
+SINT      		: ["+"|"-"] DIGIT+
 DECIMAL         : INT "." INT? | "." INT
-
 _EXP            : ("e"|"E") SINT
 FLOAT           : INT _EXP | DECIMAL _EXP?
-
 NUMBER          : FLOAT | INT
 REAL		    : ["+"|"-"] NUMBER 
-
-
-ESC_STR 	: ("\"" _STRING_ESC_INNER "\"")
+ESC_STR 		: ("\"" _STRING_ESC_INNER "\"")
 				| ("'" _STRING_ESC_INNER "'")
 _STRING_INNER       : /.*?/
 _STRING_ESC_INNER   : _STRING_INNER /(?<!\\)(\\\\)*?/
-
-
 WS: /[ \t\f\r\n]/+
 
 %ignore WS

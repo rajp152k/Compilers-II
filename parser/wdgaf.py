@@ -1,5 +1,8 @@
 # necessary imports
 import sys
+import os
+import logging
+import warnings
 from pathlib import Path
 from lark import Lark
 import lark
@@ -9,6 +12,10 @@ import argparse
 
 # driver function
 def main():
+	# set level to critical
+	logging.getLogger().setLevel(logging.CRITICAL)
+	warnings.filterwarnings('ignore')
+
 	# Import grammar and create parser
 	grammar = Path('./grammar/grammar.lark')
 	assert(grammar.is_file())
@@ -17,8 +24,8 @@ def main():
 	parser = Lark(raw_grammar, parser="lalr", transformer=ProcessTree())
 
 	# create argument parser
-	args_parser = argparse.ArgumentParser()
-	args_parser.add_argument('-s', '--src', help='source file')
+	args_parser = argparse.ArgumentParser(description='Interpreter for WDGAF language', epilog="And that's how you use the interepreter")
+	args_parser.add_argument('src', metavar='src', help='source file path')
 	args_parser.add_argument('-v', '--verbose', help="generates verbose output", action="store_true")
 
 	# get the arguments
@@ -42,12 +49,17 @@ def main():
 		parser.parse(code_raw)
 
 	# TODO: parsing error needs to be customized
-	except lark.exceptions.UnexpectedToken as unexpToken:
-		print(unexpToken)
+	except lark.exceptions.UnexpectedToken as e:
+		token = e.token
+		print("\033[91mSytnax Error: \033[00m", end='')
+		print("unexpected token '{}' at line {}, column {}".format(token, token.line, token.column))
+		print("process terminated")
 
 	# these exceptions will generally be well-defined
 	except Exception as ex:
+		print("\033[91mError: \033[00m", end='')
 		print(ex)
+		print("process terminated")
 
 
 # invoke the driver function
