@@ -1,6 +1,8 @@
 # necessary imports
 import sys
+import os
 import logging
+import warnings
 from pathlib import Path
 from lark import Lark
 import lark
@@ -12,6 +14,7 @@ import argparse
 def main():
 	# set level to critical
 	logging.getLogger().setLevel(logging.CRITICAL)
+	warnings.filterwarnings('ignore')
 
 	# Import grammar and create parser
 	grammar = Path('./grammar/grammar.lark')
@@ -46,12 +49,17 @@ def main():
 		parser.parse(code_raw)
 
 	# TODO: parsing error needs to be customized
-	except lark.exceptions.UnexpectedToken as unexpToken:
-		print(unexpToken)
+	except lark.exceptions.UnexpectedToken as e:
+		token = e.token
+		print("\033[91mSytnax Error: \033[00m", end='')
+		print("unexpected token '{}' at line {}, column {}".format(token, token.line, token.column))
+		print("process terminated")
 
 	# these exceptions will generally be well-defined
 	except Exception as ex:
+		print("\033[91mError: \033[00m", end='')
 		print(ex)
+		print("process terminated")
 
 
 # invoke the driver function
