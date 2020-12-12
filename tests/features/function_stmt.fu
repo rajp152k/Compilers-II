@@ -1,5 +1,6 @@
 # This program tests the ways to write
 # functional expressions in the language
+
 fig figure{
 
 	# simple functional expressions
@@ -7,7 +8,8 @@ fig figure{
 	y := x^2
 	y := 2*x 
 	y := -PI + x
-	y := -(EXP ^2 ) * (x + 2)
+	y := -(EXP ^ 2)  * (x + 2)
+	plot(x, y)
 
 	# TODO: Write as many complicated
 	# mathematical functional expressions as you can
@@ -17,6 +19,7 @@ fig figure{
 	# function invocations
 	x <- (-PI, PI)
 	y := sin(x)
+	plot(x, y, {label='sine plot'})
 
 	# TODO: set of supported functions to be defined
 	# in the math-module

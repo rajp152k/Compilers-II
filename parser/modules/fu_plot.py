@@ -27,7 +27,7 @@ def plot(xs, ys, zs, ax, props):
 	label = props.get('label', None)
 
 
-	color = props.get('color', 'black')
+	color = props.get('color', None)
 	if color != None and not is_color_like(color):
 		raise Exception('Illegal value {} for parameter color'.format(color))
 	

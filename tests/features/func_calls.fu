@@ -10,4 +10,7 @@ fig figure{
 	t <- (-PI, PI)
 	y := sin(t)
 	z := tanh(t)
+
+	plot(t, y, {label='sin'})
+	plot(t, z, {label='tanh'})	
 }
