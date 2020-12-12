@@ -30,14 +30,14 @@ def parse_list(type, points):
 	items = []
 	# iterate through every point
 	for point in points:
-		str_point = str(point)
-		if str_point.isnumeric(): items.append(float(str_point))
-		else: items.append(str_point[1:-1])
-		# if type == str:
-		# 	val = str(point)
-		# 	val = val[1:-1]
-		# 	items.append(val)
-		# else: items.append(type(point))
+		# if this is to be converted to string
+		# drop out additional quotations
+		if type == str:
+			val = str(point)
+			val = val[1:-1]
+			items.append(val)
+		# simply append the value
+		else: items.append(type(point))
 	# return the list
 	return np.array(items)
 

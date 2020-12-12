@@ -1,3 +1,6 @@
+# TODO: configuration of size using attr-list
+
+
 # necessary imports
 from lark import Transformer, v_args
 import matplotlib.pyplot as plt
@@ -38,13 +41,14 @@ class ProcessTree(Transformer):
 		self.fig.suptitle("[{}]".format(fig_id))
 		# display the plots
 		plt.legend()
+		plt.tight_layout()
 		plt.show()
 
 		# # reset-params
 		self.rows = 1
 		self.cols = 1
 		self.vars = {}
-		self.fig, self.ax = plt.subplots(1,1)
+		self.fig, self.ax = plt.subplots(1, 1, constrained_layout=True, num="We Do Give A Figure")
 		self.grid = np.zeros((1,1))
 		# close all - IMPORTANT
 		plt.close('all')
@@ -59,7 +63,6 @@ class ProcessTree(Transformer):
 		# create subplots
 		self.fig, self.ax = plt.subplots(self.rows, self.cols, constrained_layout=True, num='We Do Give a Figure')
 		self.grid = np.zeros((self.rows, self.cols))
-		# TODO: configuration of size using attr-list
 		# generate verbose message
 		if config['verbose']:
 			print("rows := {}, cols := {}, attr_list := {}".format(rows, 1, attr_list))
@@ -78,17 +81,11 @@ class ProcessTree(Transformer):
 
 
 
-
-	########################### RANGE STMT ###########
-	# real_points_list alias 
-	def real_points_list(self, *points):
-		# parse and return the list
-		return futil.parse_list(float, points)
-
-	# str_points_list alias 
-	def str_points_list(self, *points):
-		# parse and return the list
-		return futil.parse_list(str, points)
+	########################### EXPRESSIONS ###########
+	# expr_alias
+	def expr(self, value):
+		# grab and return the expression
+		return value
 
 	# expr_real alias
 	def expr_real(self, number):
@@ -110,16 +107,51 @@ class ProcessTree(Transformer):
 		# return the value
 		return value
 
-	# expr_op_expr alias
-	def expr_op_expr(self, value1, op, value2):
-		# evaluate the expression
-		return fmath.evaluate_op(value1, op, value2)
+	# expr_id alias
+	def expr_id(self, var_id):
+		# get the string representation from Token
+		var_id = str(var_id)
+		# check if this is a constant
+		if var_id in fmath.CONSTANTS: return fmath.CONSTANTS[var_id]
+		# check if value exist
+		if var_id not in self.vars:	raise Exception("Unknown parameter {}".format(var_id))
+		# fetch the list of values for this variable
+		items = self.vars[var_id]
+		# return the values
+		return items
+
+	# grab and apply appropriate operation
+	def sum_expr(self, expr1, expr2):
+		return np.add(expr1, expr2)
+	def sub_expr(self, expr1, expr2):
+		return np.subtract(expr1, expr2)
+	def prd_expr(self, expr1, expr2):
+		return np.multiply(expr1, expr2)
+	def div_expr(self, expr1, expr2):
+		return np.divide(expr1, expr2)
+	def mod_expr(self, expr1, expr2):
+		return np.mod(expr1, expr2)
+	def exp_expr(self, expr1, expr2):
+		return np.power(expr1, expr2)
+
+
+
+
+	########################### RANGE STMT ###########
+	# real_points_list alias 
+	def real_points_list(self, *points):
+		# parse and return the list
+		return futil.parse_list(float, points)
+
+	# str_points_list alias 
+	def str_points_list(self, *points):
+		# parse and return the list
+		return futil.parse_list(str, points)
 
 	# range_expr alias
 	def range_expr(self, start=None, end=None, step=None):
 		# create a range with give bounds
 		return futil.create_range(start, end, step)
-
 
 	# range_stmt alias
 	def range_stmt(self, var_id, items=[]):
@@ -139,34 +171,6 @@ class ProcessTree(Transformer):
 
 
 	########################### FUNCTION STMT ###########
-	# func_id alias
-	def func_id(self, var_id):
-		# get the string representation from Token
-		var_id = str(var_id)
-		# check if this is a constant
-		if var_id in fmath.CONSTANTS: return fmath.CONSTANTS[var_id]
-		# check if value exist
-		if var_id not in self.vars:	raise Exception("Unknown parameter {}".format(var_id))
-		# fetch the list of values for this variable
-		items = self.vars[var_id]
-		# return the values
-		return items
-
-	# func_real alias	
-	def func_real(self, number):
-		# parse and return the number
-		return float(number)
-
-	# func_const alias
-	def func_cost(self, value):
-		# take decision based on value
-		return fmath.parse_constant(value)
-
-	# func_negation alias
-	def func_negation(self, item):
-		# take unary negation
-		return np.multiply(item, -1)
-
 	# func_call_unary alias 
 	def func_call_unary(self, func_name, item):
 		# invoke the given function 
@@ -183,7 +187,7 @@ class ProcessTree(Transformer):
 		return expression
 
 	# func_op_func alias
-	def func_op_func(self, item1, op, item2):
+	def func_op_func(self, item1, op, item2=None):
 		# evaluate the expression
 		return fmath.evaluate_op(item1, op, item2)
 
