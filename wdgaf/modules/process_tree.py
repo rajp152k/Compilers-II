@@ -1,6 +1,3 @@
-# TODO: configuration of size using attr-list
-
-
 # necessary imports
 from lark import Transformer, v_args
 import matplotlib.pyplot as plt
@@ -17,14 +14,20 @@ from modules.fu_keywords import KEYWORDS
 @v_args(inline=True)
 class ProcessTree(Transformer):
 
+	# creates subplots with given values
+	def create_subplots(self, rows, cols, attr_list=None):
+		self.rows = rows
+		self.cols = cols
+		self.grid = np.zeros((rows, cols))
+		plt.close('all') # important before subplots
+		self.fig, self.ax = fplot.subplots(rows, cols, attr_list)
+
 	# constructor
 	def __init__(self):
+		# start with 1x1 grid
+		self.create_subplots(1, 1)
 		# start with an empty list of variables
-		self.rows = 1
-		self.cols = 1
 		self.vars = {}
-		self.fig, self.ax = plt.subplots(1,1, constrained_layout=True, num="We Do Give A Figure")
-		self.grid = np.zeros((1,1))
 
 
 
@@ -40,18 +43,14 @@ class ProcessTree(Transformer):
 		# update the title
 		self.fig.suptitle("[{}]".format(fig_id))
 		# display the plots
-		plt.legend()
 		plt.tight_layout()
+		plt.legend()
 		plt.show()
 
-		# # reset-params
-		self.rows = 1
-		self.cols = 1
+		# reset-params
+		self.create_subplots(1, 1)
+		# clear all variables
 		self.vars = {}
-		self.fig, self.ax = plt.subplots(1, 1, constrained_layout=True, num="We Do Give A Figure")
-		self.grid = np.zeros((1,1))
-		# close all - IMPORTANT
-		plt.close('all')
 
 
 
@@ -59,10 +58,9 @@ class ProcessTree(Transformer):
 	# size_row_stmt alias 
 	def size_row_stmt(self, rows=None, attr_list=None):
 		# parse the rows and cols
-		self.rows, self.cols = futil.parse_size(rows, None)
+		rows, cols = futil.parse_size(rows, None)
 		# create subplots
-		self.fig, self.ax = plt.subplots(self.rows, self.cols, constrained_layout=True, num='We Do Give a Figure')
-		self.grid = np.zeros((self.rows, self.cols))
+		self.create_subplots(rows, cols, attr_list)
 		# generate verbose message
 		if config['verbose']:
 			print("rows := {}, cols := {}, attr_list := {}".format(rows, 1, attr_list))
@@ -71,10 +69,9 @@ class ProcessTree(Transformer):
 	def size_row_col_stmt(self, rows=None, 
 							cols=None, attr_list=None):
 		# parse the rows and cols
-		self.rows, self.cols = futil.parse_size(rows, cols)
+		rows, cols = futil.parse_size(rows, cols)
 		# create subplots
-		self.fig, self.ax = plt.subplots(self.rows, self.cols)
-		self.grid = np.zeros((self.rows, self.cols))
+		self.create_subplots(rows, cols, attr_list)
 		# generate verbose message
 		if config['verbose']:
 			print("rows := {}, cols := {}, attr_list := {}".format(rows, cols, attr_list))
@@ -101,6 +98,10 @@ class ProcessTree(Transformer):
 	def expr_negation(self, value):
 		# return the negation of expression
 		return -1.0 * value
+	# expr_positive alias
+	def expr_positive(self, value):
+		# return the value of expression
+		return value
 
 	# nested_expr alias
 	def nested_expr(self, value):
@@ -129,6 +130,8 @@ class ProcessTree(Transformer):
 		return np.multiply(expr1, expr2)
 	def div_expr(self, expr1, expr2):
 		return np.divide(expr1, expr2)
+	def floor_div_expr(self, expr1, expr2):
+		return np.floor_divide(expr1, expr2)
 	def mod_expr(self, expr1, expr2):
 		return np.mod(expr1, expr2)
 	def exp_expr(self, expr1, expr2):
@@ -228,7 +231,7 @@ class ProcessTree(Transformer):
 		ys = self.vars[y_id]
 		props = {}
 		for item in attr_list: props = item
-		fplot.create_plot(self.ax, self.grid, xs, ys, None, props)
+		fplot.create_plot(self.ax, self.grid, xs, ys, None, props, category='plot')
 
 
 	########################### CONTOUR ###########
@@ -259,7 +262,7 @@ class ProcessTree(Transformer):
 		ys = self.vars[y_id]
 		props = {}
 		for item in attr_list: props = item
-		fplot.create_plot(self.ax, self.grid, xs, ys, items, props)
+		fplot.create_plot(self.ax, self.grid, xs, ys, items, props, category='contour')
 		# generate verbose message
 		if config['verbose']: print("eqn := {}".format(items))
 
@@ -279,8 +282,8 @@ class ProcessTree(Transformer):
 	# grabs and returns the attribute
 	def attribute(self, key, value):
 		key, value = str(key), str(value)
-		if value.isnumeric():	return (key, float(value))
-		else:	return (key, value[1:-1])
+		try: return (key, float(value))
+		except: return (key, value[1:-1])
 
 
 

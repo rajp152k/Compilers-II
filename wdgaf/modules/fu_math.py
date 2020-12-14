@@ -11,6 +11,15 @@ CONSTANTS = {
 
 # invokes the function on given item(s)
 def invoke_unary_function(func, item):
+	if func == 'random':
+		if type(item) != float:
+			raise Exception("Invalid parameter {} for random function".format(item))
+		if not item.is_integer():
+			raise Exception("Invalid parameter {} for random function".format(item))
+		if item < 1:
+			raise Exception("Invalid parameter {} for random function".format(item))
+		return np.random.rand(int(item))
+
 	# take decision based on func
 	if 	 func == 'sin':			return np.sin(item)
 	elif func == 'cos':			return np.cos(item)
@@ -18,7 +27,6 @@ def invoke_unary_function(func, item):
 	elif func == 'arcsin':		return np.arcsin(item)
 	elif func == 'arccos':		return np.arccos(item)
 	elif func == 'arctan':		return np.arctan(item)
-	elif func == 'arctan2':		return np.arctan2(item)
 	elif func == 'sinh':		return np.sinh(item)
 	elif func == 'cosh':		return np.cosh(item)
 	elif func == 'tanh':		return np.tanh(item)
@@ -32,20 +40,18 @@ def invoke_unary_function(func, item):
 	elif func == 'floor':		return np.floor(item)
 	elif func == 'ceil':		return np.ceil(item)
 	elif func == 'trunc':		return np.trunc(item)
-	elif func == 'negative':	return np.negative(item)
-	elif func == 'positive':	return np.positive(item)
-	elif func == 'absolute':	return np.absolute(item)
 	elif func == 'round':		return np.round(item)
+	elif func == 'negative':	return np.negative(item)
+	elif func == 'absolute':	return np.absolute(item)
 	elif func == 'exp':			return np.exp(item)
 	elif func == 'exp2':		return np.exp2(item)
 	elif func == 'log':			return np.log(item)
 	elif func == 'log2':		return np.log2(item)
 	elif func == 'log10':		return np.log10(item)
-	elif func == 'exmp1':		return np.exmp1(item)
+	elif func == 'expm1':		return np.expm1(item)
 	elif func == 'log1p':		return np.log1p(item)
 	elif func == 'sqrt':		return np.sqrt(item)
 	elif func == 'square':		return np.square(item)
-	elif func == 'cube':		return np.cube(item)
 	elif func == 'reciprocal':	return np.reciprocal(item)
 	else	:					raise Exception("Unknown function {}".format(func))
 
@@ -58,13 +64,11 @@ def invoke_binary_function(func, item1, item2):
 	elif func == 'subtract':	return np.subtract(item1, item2)
 	elif func == 'multiply':	return np.multiply(item1, item2)
 	elif func == 'divide': 		return np.divide(item1, item2)
-	elif func == 'logaddexp':	return np.logaddexp(item1, item2)
-	elif func == 'logaddexp2':	return np.logaddexp2(item1, item2)
-	elif func == 'true_divide':	return np.true_divide(item1, item2)
 	elif func == 'floor_divide': return np.floor_divide(item1, item2)
 	elif func == 'power':		return np.power(item1, item2)
-	elif func == 'remainder': 	return np.remainder(item1, item2)	
 	elif func == 'mod': 		return np.mod(item1, item2)
+	elif func == 'logaddexp':	return np.logaddexp(item1, item2)
+	elif func == 'logaddexp2':	return np.logaddexp2(item1, item2)
 	elif func == 'gcd': 		return np.gcd(item1, item2)
 	elif func == 'lcm': 		return np.lcm(item1, item2)
 	elif func == 'arctan2': 	return np.arctan2(item1, item2)

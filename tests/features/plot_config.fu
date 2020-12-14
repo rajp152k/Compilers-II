@@ -1,0 +1,42 @@
+# This program shows the configuration of plot
+# using the attributes to the plot statement
+fig figure{
+	x <-(-10, 10)
+	y := x^2
+	plot(x, y, {
+		title='parabola',
+		label='y=x^2',
+		xlabel='x',
+		ylabel='y',
+		xscale='linear',
+		yscale='linear',
+		xmargin=0.1,
+		ymargin=-0.1,
+		xautoscale='true',
+		yautoscale='true',
+		xrotation=45,
+		yrotation=-45,
+		xmajorticks='false',
+		xminorticks='true',
+		xticklabel='false',
+		ymajorticks='true',
+		yminorticks='false',
+		yticklabel='true',
+		gridlines='true',
+		facecolor='lightblue',
+		linestyle='-.',
+		linewidth=2.5,
+		fillstyle='full',
+		alpha=0.5,
+		dashcapstyle='round',
+		dashjoinstyle='bevel',
+		solidcapstyle='round',
+		solidjoinstyle='projecting',
+		drawstyle='default',
+		marker='x',
+		markeredgecolor='red',
+		markerfacecolor='green',
+		markeredgewidth=1.5,
+		markersize=10.0
+	})
+}

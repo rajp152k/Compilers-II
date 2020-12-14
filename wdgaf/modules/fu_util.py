@@ -29,15 +29,15 @@ def parse_list(type, points):
 	# stores the list items
 	items = []
 	# iterate through every point
-	for point in points:
+	for point in points:	
 		# if this is to be converted to string
 		# drop out additional quotations
-		if type == str:
+		try:
+			items.append(float(point))
+		except:
 			val = str(point)
 			val = val[1:-1]
 			items.append(val)
-		# simply append the value
-		else: items.append(type(point))
 	# return the list
 	return np.array(items)
 

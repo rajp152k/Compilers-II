@@ -1,0 +1,14 @@
+# This program shows the configuration using size statement
+fig figure{ 
+
+	size <- (3 , 3) { # 3x3 grid
+		sharex='true', # allow sharing x-axis
+		sharey='true',  # allow sharing y-axis
+		width=10, # 10 inches in width
+		height=6, # 6 inches in height
+		facecolor='lightblue', # facecolor is lightblue
+		edgecolor='red', # edgecolor is red
+		linewidth=1.5 # edgewidth 1.5
+	}
+
+}

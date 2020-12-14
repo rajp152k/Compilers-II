@@ -1,6 +1,4 @@
-# This programs the use of contour
-# TODO: need to figure out why 1 extra plot is generated!
-
+# This programs demonstrates the use of contour
 
 fig figure1{
 	size <- (2, 2)
