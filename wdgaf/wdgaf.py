@@ -48,7 +48,7 @@ def main():
 	try:
 		parser.parse(code_raw)
 
-	# TODO: parsing error needs to be customized
+	# catch syntax errors
 	except lark.exceptions.UnexpectedToken as e:
 		token = e.token
 		print("\033[91mSytnax Error: \033[00m", end='')

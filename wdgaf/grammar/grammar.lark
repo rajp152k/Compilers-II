@@ -18,18 +18,41 @@ size_stmt : "size" "<-" INT [attr_list] -> size_row_stmt
 	| "size" "<-" "(" INT "," INT ")" [attr_list] -> size_row_col_stmt
 
 
+// expression for range are independent
+// and do not involve variables
+rsum_expr: rprod_expr -> expr
+		| rsum_expr "+" rprod_expr -> sum_expr
+		| rsum_expr "-" rprod_expr -> sub_expr
+rprod_expr: rexp_expr -> expr
+		| rprod_expr "*" rexp_expr -> prd_expr
+		| rprod_expr "/" rexp_expr -> div_expr
+		| rprod_expr "//" rexp_expr -> floor_div_expr
+		| rprod_expr "%" rexp_expr -> mod_expr
+rexp_expr: ratom_expr -> expr
+		| rexp_expr "^" ratom_expr -> exp_expr
+ratom_expr	: REAL 				-> expr_real
+			| CONST 			-> expr_const
+			| "-" ratom_expr	-> expr_negation
+			| "+" ratom_expr	-> expr_positive
+			| "(" rsum_expr ")"	-> nested_expr
+
+
+// expressions for functions involves 
+// variables and function calls
 sum_expr: prod_expr -> expr
 		| sum_expr "+" prod_expr -> sum_expr
 		| sum_expr "-" prod_expr -> sub_expr
 prod_expr: exp_expr -> expr
 		| prod_expr "*" exp_expr -> prd_expr
 		| prod_expr "/" exp_expr -> div_expr
+		| prod_expr "//" exp_expr -> floor_div_expr
 		| prod_expr "%" exp_expr -> mod_expr
 exp_expr: atom_expr -> expr
 		| exp_expr "^" atom_expr -> exp_expr
 atom_expr	: REAL 				-> expr_real
 			| CONST 			-> expr_const
 			| "-" atom_expr		-> expr_negation
+			| "+" atom_expr		-> expr_positive
 			| "(" sum_expr ")"	-> nested_expr
 			| id 				-> expr_id
 
@@ -38,17 +61,19 @@ atom_expr	: REAL 				-> expr_real
 range_stmt 	: id "<-" points 	-> range_stmt
 			| id "<-" range		-> range_stmt
 
-points 	: "[" REAL ("," REAL)* "]"	-> real_points_list
+points 	: "[" rsum_expr ("," rsum_expr)* "]"	-> real_points_list
+		| "[" "]" -> real_points_list
 		| "[" ESC_STR ("," ESC_STR)* "]" -> str_points_list
 
-range : "(" sum_expr "," sum_expr ")" ("step" sum_expr)? -> range_expr
+range : "(" rsum_expr "," rsum_expr ")" ("step" rsum_expr)? -> range_expr
 
 
 function_stmt 	: id ":=" func_expr 	-> func_stmt
 func_expr : sum_expr 	-> expr
 	| id "(" func_expr ")" 		-> func_call_unary
 	| id "(" func_expr "," func_expr ")" -> func_call_binary
-
+	| "[" sum_expr ("," sum_expr)* "]" -> real_points_list
+	| "[" "]" -> real_points_list
 
 plot_stmt : "plot" "(" id "," id ("," attr_list)? ")"	-> plt_stmt
 
@@ -66,8 +91,7 @@ id 		        : ID 		-> identifier
 
 
 
-ATTR_VALUE 		: ESC_STR | REAL | BOOLEAN
-BOOLEAN			: "true" | "false"
+ATTR_VALUE 		: ESC_STR | REAL
 COMMENT			: 	"#" /.*/
 CONST 			: UCASE_LETTER+
 LCASE_LETTER    : "a".."z"

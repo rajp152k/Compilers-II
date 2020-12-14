@@ -3,6 +3,4 @@ KEYWORDS = [
 	'fig',
 	'size',
 	'step',
-	'plot',
-	'print'
 ]
