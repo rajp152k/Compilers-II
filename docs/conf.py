@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'WDGAF (We Do Give A Figure)'
-copyright = '2020, Vedant Singh, Raj Deepaknath Patil, Shubham Panchal, Shah Nisarg Pankaj, Karan Bhukar, Himanshu Bishnoi'
-author = 'Vedant Singh, Raj Deepaknath Patil, Shubham Panchal, Shah Nisarg Pankaj, Karan Bhukar, Himanshu Bishnoi'
+copyright = '2020, Vedant Singh, Raj Patil, Shubham Panchal, Shah Nisarg Pankaj, Karan Bhukar, Himanshu Bishnoi'
+author = 'Vedant Singh, Raj Patil, Shubham Panchal, Shah Nisarg Pankaj, Karan Bhukar, Himanshu Bishnoi'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0'
