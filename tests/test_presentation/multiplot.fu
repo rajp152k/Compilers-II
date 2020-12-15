@@ -1,0 +1,12 @@
+#multiple plots in same figure
+fig figure{
+	x <- (0,10) step .05
+	y:= sin(x)
+	z:= cos(x/2)
+	r:= x/5 - 1
+	
+	plot(x,y, {label='sine'})
+	plot(x,z, {label='cosine'})
+	plot(x,r, {label='st line'})
+}
+
