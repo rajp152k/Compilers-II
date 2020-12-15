@@ -1,9 +1,16 @@
-# WDGAF
+```text
+             _              __ 
+            | |            / _|
+__      ____| | __ _  __ _| |_ 
+\ \ /\ / / _` |/ _` |/ _` |  _|
+ \ V  V / (_| | (_| | (_| | |  
+  \_/\_/ \__,_|\__, |\__,_|_|  
+                __/ |          
+               |___/           
+```
+
 *We Do Give A Figure*
 
 ---
-Compilers II - group project
----
 
-Check [Wiki](https://github.com/rajp152k/Compilers-II/wiki) for conceptualization and resources.
 

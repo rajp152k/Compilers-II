@@ -1,0 +1,8 @@
+# python 
+
+__pycache__/
+dist/
+docs/_build
+
+# vim
+*.swp
