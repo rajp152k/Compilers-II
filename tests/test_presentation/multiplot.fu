@@ -1,3 +1,4 @@
+#multiple plots in same figure
 fig figure{
 	x <- (0,10) step .05
 	y:= sin(x)
