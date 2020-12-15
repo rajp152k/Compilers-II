@@ -7,7 +7,7 @@ README = (ROOT/'wdgaf/README.md').read_text()
 
 setup(
         name = "WDGAF",
-        version = "1.0.0",
+        version = "1.0.3",
         description = "We Do Give a Figure",
         long_description = README,
         long_description_content_type = "text/markdown",
@@ -20,12 +20,12 @@ setup(
                 "Programming Language :: Python :: 3",
                 "Programming Language :: Python :: 3.8",
             ],
-        packages = find_packages(where='.',exclude=("tests","docs")),
+        packages = find_packages(where='.',exclude=('tests','docs')),
         include_package_data=True,
         install_requires=["matplotlib","numpy","lark-parser"],
         entry_points={
             "console_scripts":[
-                "gaf=reader.__main__:main"
+                "gaf=wdgaf.__main__:main"
                 ]
             },
         )

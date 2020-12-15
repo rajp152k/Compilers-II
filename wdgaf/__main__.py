@@ -5,15 +5,21 @@ import warnings
 from pathlib import Path
 from lark import Lark
 import lark
+
+
+sys.path.append(str(Path(__file__).parent))
+
 from modules.process_tree import ProcessTree
 from modules.fu_config import config
+
+import wdgaf.gaf as gaf
+
 import argparse
 
-import wdgaf
 
 def main():
     # setup mechanism for any meta-requirements in the close future
-    wdgaf.driver()
+    gaf.driver()
 
 if __name__ == '__main__':
     main()

@@ -10,15 +10,17 @@ from modules.process_tree import ProcessTree
 from modules.fu_config import config
 import argparse
 
+
+THIS = Path(__file__).parent
 # driver function
 def driver():
 	# set level to critical
 	logging.getLogger().setLevel(logging.CRITICAL)
 	warnings.filterwarnings('ignore')
 
-	# Import grammar and create parser
-	grammar = Path('./grammar/grammar.lark')
-	assert(grammar.is_file())
+
+	grammar = THIS/'grammar/grammar.lark';assert(grammar.is_file())
+
 	with open(grammar,'r') as f: raw_grammar = f.read()
 	# create the parser instance 
 	parser = Lark(raw_grammar, parser="lalr", transformer=ProcessTree())

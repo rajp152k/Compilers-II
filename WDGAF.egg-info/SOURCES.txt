@@ -9,7 +9,7 @@ WDGAF.egg-info/requires.txt
 WDGAF.egg-info/top_level.txt
 wdgaf/__init__.py
 wdgaf/__main__.py
-wdgaf/wdgaf.py
+wdgaf/gaf.py
 wdgaf/grammar/grammar.lark
 wdgaf/modules/__init__.py
 wdgaf/modules/fu_config.py
