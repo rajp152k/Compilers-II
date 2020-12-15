@@ -11,7 +11,7 @@ from modules.fu_config import config
 import argparse
 
 # driver function
-def main():
+def driver():
 	# set level to critical
 	logging.getLogger().setLevel(logging.CRITICAL)
 	warnings.filterwarnings('ignore')
@@ -63,4 +63,5 @@ def main():
 
 
 # invoke the driver function
-main()
+if __name__ == '__main__':
+    driver()

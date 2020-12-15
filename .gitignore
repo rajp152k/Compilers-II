@@ -3,6 +3,9 @@
 __pycache__/
 dist/
 docs/_build
+build/
 
 # vim
 *.swp
+
+

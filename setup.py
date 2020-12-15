@@ -20,7 +20,7 @@ setup(
                 "Programming Language :: Python :: 3",
                 "Programming Language :: Python :: 3.8",
             ],
-        find_packages(exclude=("tests","docs")),
+        packages = find_packages(where='.',exclude=("tests","docs")),
         include_package_data=True,
         install_requires=["matplotlib","numpy","lark-parser"],
         entry_points={
