@@ -29,6 +29,7 @@ def driver():
 	args_parser = argparse.ArgumentParser(description='Interpreter for WDGAF language', epilog="And that's how you use the interepreter")
 	args_parser.add_argument('src', metavar='src', help='source file path')
 	args_parser.add_argument('-v', '--verbose', help="generates verbose output", action="store_true")
+	args_parser.add_argument('-t','--tree',help='print parse tree')
 
 	# get the arguments
 	args = args_parser.parse_args()
@@ -48,7 +49,9 @@ def driver():
 
 	# execute user code
 	try:
-		parser.parse(code_raw)
+		tree = parser.parse(code_raw)
+        if args.tree:
+        	print(tree.pretty())
 
 	# catch syntax errors
 	except lark.exceptions.UnexpectedToken as e:
