@@ -1,5 +1,5 @@
 fig figure1{
-	x <- (-5,5) step 5
-	y := (EXP ^sin(x)) -*cos(4*x) + (sin((2*x-pi)/24)^5)
+	x <- (-5,5) step 0.1
+	y := (EXP ^sin(x)) -cos(4*x) + (sin((2*x-PI)/24)^5)
 	plot(x,y)
 }

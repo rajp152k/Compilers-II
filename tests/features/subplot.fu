@@ -1,0 +1,16 @@
+fig figure{
+    size <- (3, 3)
+    x <- (-PI, PI) 
+
+    y := sin(x)
+    plot(x, y)
+
+    y := cos(x)
+    plot(x, y, {col=1})
+
+    y := 2*x
+    plot(x, y, {row=2})
+
+    y := x^2
+    plot(x, y, {row=3, col=3})
+}

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: WDGAF
-Version: 1.0.4
+Version: 1.0.7
 Summary: We Do Give a Figure
 Home-page: https://github.com/rajp152k/Compilers-II
 Author: WDGAF
@@ -27,12 +27,12 @@ Description: ```text
         
         some terminology:
         
-        gaf : executable to *get a figure*
+        gaf : executable to *get a figure*  
         fu  : figure-unfigured : source files containing description of the figure
         
         ### Quick Links
         
-         - [Documentation : yet to configure]()
+         - [Documentation](https://we-do-give-a-figure.readthedocs.io/)
          - [Source](https://github.com/rajp152k/Compilers-II)
         
         ## Installation
