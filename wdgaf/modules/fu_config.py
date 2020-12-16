@@ -18,6 +18,7 @@ size_attrs = [
 plot_attrs = [
 	'label',
 	'title',
+	'color',
 	'xlabel',
 	'ylabel',
 	'xscale',
