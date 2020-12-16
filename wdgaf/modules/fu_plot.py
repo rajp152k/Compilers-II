@@ -97,10 +97,10 @@ def configure_plot(ax, props):
 		raise_illegal_attribute_error('yscale', yscale)
 
 	# parse the margins
-	xmargin = props.get('xmargin', 0.0)
+	xmargin = props.get('xmargin', 0.1)
 	if xmargin <= -0.5:
 		raise_illegal_attribute_error('xmargin', xmargin)
-	ymargin = props.get('ymargin', 0.0)
+	ymargin = props.get('ymargin', 0.1)
 	if ymargin <= -0.5:
 		raise_illegal_attribute_error('ymargin', ymargin)
 
@@ -223,8 +223,8 @@ def plot(xs, ys, zs, ax, props, category):
 		if drawstyle not in ['default', 'steps', 'steps-pre', 'steps-mid', 'steps-post']:
 			raise raise_illegal_attribute_error('drawstyle', drawstyle)
 
-		marker = props.get('marker', '.')
-		if marker not in [".",",","o","v","^","<",">","1","2","3","4","8","s","p","P","*","h","H","+","x","X","D","d","|","_"]:
+		marker = props.get('marker', None)
+		if marker and marker not in [".",",","o","v","^","<",">","1","2","3","4","8","s","p","P","*","h","H","+","x","X","D","d","|","_"]:
 			raise_illegal_attribute_error('marker', marker)
 
 		markeredgecolor = props.get('markeredgecolor', 'white')
@@ -250,7 +250,9 @@ def plot(xs, ys, zs, ax, props, category):
 						marker=marker, markersize=markersize,
 						markeredgecolor=markeredgecolor,
 						markerfacecolor=markerfacecolor,
-						markeredgewidth=markeredgewidth)
+						markeredgewidth=markeredgewidth
+				)
+		# ax.plot(xs, ys)
 
 	# contour plot
 	elif category == 'contour':
