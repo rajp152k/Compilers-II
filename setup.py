@@ -7,7 +7,7 @@ README = (ROOT/'wdgaf/README.md').read_text()
 
 setup(
         name = "WDGAF",
-        version = "1.0.3",
+        version = "1.0.4",
         description = "We Do Give a Figure",
         long_description = README,
         long_description_content_type = "text/markdown",

@@ -19,12 +19,12 @@ WDGAF is a domain specific language built upon matplotlib with a focus on ease-o
 
 some terminology:
 
-gaf : executable to *get a figure*
+gaf : executable to *get a figure*  
 fu  : figure-unfigured : source files containing description of the figure
 
 ### Quick Links
 
- - [Documentation : yet to configure]()
+ - [Documentation](https://we-do-give-a-figure.readthedocs.io/)
  - [Source](https://github.com/rajp152k/Compilers-II)
 
 ## Installation
