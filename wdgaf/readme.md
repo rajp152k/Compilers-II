@@ -1,24 +1,45 @@
-# WDGAF (We Do Give A Figure)  
-This is a simple domain specific language written for data-visualization. This language allows you to create plots with a few set of lines.  
+```text
+                         _              __ 
+                        | |            / _|
+            __      ____| | __ _  __ _| |_ 
+            \ \ /\ / / _` |/ _` |/ _` |  _|
+             \ V  V / (_| | (_| | (_| | |  
+              \_/\_/ \__,_|\__, |\__,_|_|  
+                            __/ |          
+                           |___/           
+```
 
-# Language Manual  
-You must have recieved a language manual with the download. Please checkout the language manual and tutorials for the languege.  
+*We Do Give A Figure*
 
-# How to run?  
-You start by writing a WDGAF program and save it with .fu extenion e.g. `program.fu` and then use the following command to execute your source-code  
-`python wdgaf.py <filepath>`  
-e.g. `python wdgaf.py ~/Desktop/program.fu` assuming that `program.fu` is located on user's desktop.  
-Furthermore is you wish to debug your source code then use the `--verbose` option as shown below:  
-`python wdgaf.py <filepath> --verbose`
+---
 
+We do as we say : give a figure.  
 
-# Dependencies  
-Python >= 3.8  
-lark-parser (https://github.com/lark-parser/lark)  
-matplotlib (https://matplotlib.org/)  
-numpy (https://numpy.org/)  
-The tutorial shows the exact installation steps!  
+WDGAF is a domain specific language built upon matplotlib with a focus on ease-of-use.
 
-# DOCS
-You can find the docs/tutorials at https://docs.google.com/document/d/1jO36_lyoQ2vGgECnGyYwksexS47RYIs6T83r5LqbUhY/edit?usp=sharing  
+some terminology:
+
+gaf : executable to *get a figure*  
+fu  : figure-unfigured : source files containing description of the figure
+
+### Quick Links
+
+ - [Documentation](https://we-do-give-a-figure.readthedocs.io/)
+ - [Source](https://github.com/rajp152k/Compilers-II)
+
+## Installation
+
+```bash
+pip install WDGAF
+```
+
+That's it, you're ready to go.
+
+## Usage
+
+```bash
+gaf <path/to/source.fu>
+```
+
+and now you get your figure ..
 

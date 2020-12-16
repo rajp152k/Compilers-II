@@ -22,7 +22,7 @@ copyright = '2020, Vedant Singh, Raj Patil, Shubham Panchal, Shah Nisarg Pankaj,
 author = 'Vedant Singh, Raj Patil, Shubham Panchal, Shah Nisarg Pankaj, Karan Bhukar, Himanshu Bishnoi'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0'
+release = '0.0.4'
 
 
 # -- General configuration ---------------------------------------------------
