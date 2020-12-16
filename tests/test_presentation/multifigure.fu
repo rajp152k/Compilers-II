@@ -1,0 +1,25 @@
+# multiple figures
+
+fig figure1{
+	theta <- (0,12*PI) step .05
+	t := sin(theta)
+	t2 := sin((2*theta-PI)/24)
+	t3 := cos(4*theta)
+	t4 := cos(theta)
+	r := (EXP ^ t) -2*t3 + (t2 ^ 5)
+	x := r * t4
+	y := r * t
+	plot(x,y, {label='butterfly curve'}) 
+}
+fig figure2{
+	t <- (-1*PI, PI) step .05
+	t1 := cos(8*t)
+	t2 := cos(24*t)
+	t3 := cos(200*t)
+	t4 := sin(t)
+	t5 := cos(t)
+	r := (1+0.9*t1)*(1+0.1*t2)*(0.9+0.05*t3)*(1+t4)
+	x := r*t5
+	y := r*t4
+	plot(x,y)
+}
