@@ -1,6 +1,6 @@
 #multiple plots in same figure
 fig figure{
-	x <- (0,10) step .05
+	x <- (0,10) step 0.1
 	y:= sin(x)
 	z:= cos(x/2)
 	r:= x/5 - 1
