@@ -55,6 +55,8 @@ atom_expr	: REAL 				-> expr_real
 			| "+" atom_expr		-> expr_positive
 			| "(" sum_expr ")"	-> nested_expr
 			| id 				-> expr_id
+			| id "(" sum_expr ")" 		-> func_call_unary
+			| id "(" sum_expr "," sum_expr ")" -> func_call_binary
 
 
 
@@ -70,8 +72,6 @@ range : "(" rsum_expr "," rsum_expr ")" ("step" rsum_expr)? -> range_expr
 
 function_stmt 	: id ":=" func_expr 	-> func_stmt
 func_expr : sum_expr 	-> expr
-	| id "(" func_expr ")" 		-> func_call_unary
-	| id "(" func_expr "," func_expr ")" -> func_call_binary
 	| "[" sum_expr ("," sum_expr)* "]" -> real_points_list
 	| "[" "]" -> real_points_list
 
