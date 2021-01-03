@@ -24,7 +24,7 @@ fu  : figure-unfigured : source files containing description of the figure
 
 ### Quick Links
 
- - [Documentation](https://we-do-give-a-figure.readthedocs.io/)
+ - [Documentation](https://github.com/rajp152k/Compilers-II/blob/master/WDGAF%20-%20Tutorial.pdf)
  - [Source](https://github.com/rajp152k/Compilers-II)
 
 ## Installation
